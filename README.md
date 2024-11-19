@@ -8,3 +8,11 @@ A web app for bug tracking for the Webtech course
 * Bugs issued by the testers are reviewed by team members and they can allocate themselves to fixing a bug.
 * When a bug is resolved, the team member may add a link with the committed solution to the bug status.
 * The user's dashoard contains both the project they participate in, as well as the bugs issued, where they can check their status.
+
+# Project Plan
+The project will be built with the following technologies:
+* a relational database with tables representing students, bugs, projects and student role (as junction table)
+* internal JavaScript classes, which map to the table in the database
+* back-end running on Node.js
+* single page front-end built with React framework
+* application screens identified at this stage in the project: login/sign-up screen, dashboard screen, with project list and bugs issued list
