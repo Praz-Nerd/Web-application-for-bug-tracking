@@ -14,4 +14,58 @@ router.get('/', async (req, res, next)=>{
     }
 })
 
+//get projects by id
+// path /projects/:pid
+router.get('/:pid', async (req, res, next)=>{
+    try{
+        const project = await models.Project.findByPk(req.params.pid)
+        if(project){
+            res.status(201).json(project)
+        }
+        else{
+            res.status(404).json({message: "Cannot find project"})
+        }
+        
+    }catch(err){
+        next(err)
+    }
+})
+
+//get members of a project
+// path /projects/:pid/members
+router.get('/:pid/members', async (req, res, next)=>{
+    try{
+        const project = await models.Project.findByPk(req.params.pid, {
+            include: [{association: 'participants', as: 'participants'}]
+        })
+        if(project){
+           res.status(200).json(project.participants)
+        }
+        else{
+            res.status(404).json({message: "Cannot find project"})
+        }
+        
+    }catch(err){
+        next(err)
+    }
+})
+
+//get testers of a project
+router.get('/:pid/testers', async (req, res, next)=>{
+    try{
+        const project = await models.Project.findByPk(req.params.pid, {
+            include: [{association: 'testers', as: 'testers'}]
+        })
+        if(project){
+           res.status(200).json(project.testers)
+        }
+        else{
+            res.status(404).json({message: "Cannot find project"})
+        }
+        
+    }catch(err){
+        next(err)
+    }
+})
+
 export default router
