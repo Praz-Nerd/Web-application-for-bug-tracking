@@ -16,3 +16,10 @@ The project will be built with the following technologies:
 * back-end running on Node.js
 * single page front-end built with React framework
 * application screens identified at this stage in the project: login/sign-up screen, dashboard screen, with project list and bugs issued list
+
+# TODO
+* testers to add bugs to projects
+* project participants to update the status of a bug
+* connect front-end with back-end
+* create pages for login and dashboard
+
