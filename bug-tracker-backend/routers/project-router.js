@@ -68,4 +68,22 @@ router.get('/:pid/testers', async (req, res, next)=>{
     }
 })
 
+//path for viewing all bugs in a project
+router.get('/:pid/bugs', async (req, res, next)=>{
+    try{
+        const project = await models.Project.findByPk(req.params.pid, {
+            include: [{association: 'bugs', as: 'bugs'}]
+        })
+        if(project){
+           res.status(200).json(project.bugs)
+        }
+        else{
+            res.status(404).json({message: "Cannot find project"})
+        }
+        
+    }catch(err){
+        next(err)
+    }
+})
+
 export default router

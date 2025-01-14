@@ -26,8 +26,8 @@ User.belongsToMany(Project, { as: 'participatingProjects', through: 'userPartici
 Project.belongsToMany(User, { as: 'participants', through: 'userParticipations' })
 
 //project can have many bugs
-Project.hasMany(Bug, { as: 'Bugs', foreignKey: 'projectId' })
-Bug.belongsTo(Project, { as: 'Project', foreignKey: 'projectId' })
+Project.hasMany(Bug, { as: 'bugs', foreignKey: 'projectId' })
+Bug.belongsTo(Project, { as: 'project', foreignKey: 'projectId' })
 
 //sync database
 try {
