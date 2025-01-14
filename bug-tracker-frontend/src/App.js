@@ -4,6 +4,7 @@ import LoginForm from "./components/LoginForm";
 import ProjectDashboard from "./components/ProjectDashboard";
 import BugList from "./components/BugList";
 import BugForm from "./components/BugForm";
+import AllProjects from "./components/AllProjects";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider from "./context/AuthProvider";
 import "./styles/App.css";
@@ -19,6 +20,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ProjectDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/projects/all"
+          element={
+            <ProtectedRoute>
+              <AllProjects />
             </ProtectedRoute>
           }
         />

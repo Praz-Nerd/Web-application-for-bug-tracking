@@ -1,13 +1,22 @@
 .bug-list {
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .bug-list a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .bug-list a:hover {
-    text-decoration: underline;
-  }
+  padding: 20px;
+}
+
+.bug-list ul {
+  margin-top: 20px;
+}
+
+.bug-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.bug-list button {
+  margin: 0;
+}

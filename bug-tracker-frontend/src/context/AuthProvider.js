@@ -1,32 +1,28 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setUser({ role: localStorage.getItem("role") });
-    }
-  }, []);
-
   const login = (email, password) => {
-    // Replace with real API call
-    const fakeApiResponse = { token: "fakeToken", role: "PM" };
-    localStorage.setItem("token", fakeApiResponse.token);
-    localStorage.setItem("role", fakeApiResponse.role);
-    setUser({ role: fakeApiResponse.role });
-    navigate("/projects");
+    if (email === "test@test.com" && password === "password") {
+      setUser({ role: "pm", id: 1 });
+      localStorage.setItem("user", JSON.stringify({ role: "pm", id: 1 }));
+      navigate("/projects");
+    } else {
+      alert("Invalid credentials");
+    }
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
     setUser(null);
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
