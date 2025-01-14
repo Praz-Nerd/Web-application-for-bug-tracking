@@ -7,6 +7,7 @@ import BugForm from "./components/BugForm";
 import AllProjects from "./components/AllProjects";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider from "./context/AuthProvider";
+import CreateProject from "./components/CreateProject";
 import "./styles/App.css";
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/projects/create" element={<CreateProject />} />
       </Routes>
     </AuthProvider>
   );
