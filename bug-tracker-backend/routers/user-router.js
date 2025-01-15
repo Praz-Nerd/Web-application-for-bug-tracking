@@ -1,7 +1,28 @@
 import express from 'express'
 import models from '../models/index.mjs'
+import { where } from 'sequelize'
 
 const router = express.Router()
+
+//path for getting user based on email and password
+//request body is the email and password
+router.post('/login', async (req, res, next)=>{
+    try{
+        const user = await models.User.findAll({
+            where:{
+                email: req.body.email,
+                password: req.body.password
+            }
+        })
+        //check if array is empty
+        if(user.length <= 0){
+            res.status(404).json({message:"user not found"})
+        }
+        res.status(200).json(user[0])
+    }catch(err){
+        next(err)
+    }
+})
 
 // path for adding a user /users
 router.post('/', async (req, res, next)=>{

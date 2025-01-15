@@ -1,22 +1,25 @@
 import React, { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import getResponse from "../utils/GetResponse";
+import useLocalStorage from "../utils/UseLocalStorage";
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  
+  const [user, setUser] = useLocalStorage('user', null)
   const navigate = useNavigate();
 
-  const login = (email, password) => {
-    if (email === "test@test.com" && password === "password") {
-      setUser({ role: "pm", id: 1 });
-      localStorage.setItem("user", JSON.stringify({ role: "pm", id: 1 }));
+  const login = async(email, password) => {
+    let user = null
+    user = await getResponse('http://localhost:8080/users/login', 'POST', JSON.stringify({email, password}))
+    console.log(user)
+    if (user.id) {
+      setUser(user);
+      //localStorage.setItem("user", JSON.stringify(user));
       navigate("/projects");
     } else {
-      alert("Invalid credentials");
+      alert(user.message);
     }
   };
 
