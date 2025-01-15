@@ -53,23 +53,23 @@ const ProjectDashboard = () => {
         <button  onClick={logout}>Logout</button>
       </div>
       <h1>Hello, {user.username}!</h1>
-      <div class="section">
+      <div className="section">
         <h1>My Projects</h1>
         <ul>
           {myProjects.map((project) => (
             <li key={project.id}>
-              <div class="listElement"><div class="bullet">● &nbsp;</div> {project.title} - {project.repository} </div>
+              <div className="listElement"><div className="bullet">● &nbsp;</div> {project.title} - {project.repository} </div>
                 <Link to={`/projects/${project.id}/bugs`}>View Bugs</Link>
             </li>
           ))}
         </ul>
       </div>
-      <div class="section">
+      <div className="section">
         <h1>Testing Project</h1>
         <ul>
           {testerProjects.map((project) => (
             <li key={project.id}>
-              <div class="listElement"><div class="bullet">● &nbsp;</div> {project.title} - {project.repository}</div>
+              <div className="listElement"><div className="bullet">● &nbsp;</div> {project.title} - {project.repository}</div>
               <Link to={`/projects/${project.id}/bugs/new`}>Submit Bug</Link>
             </li>
           ))}

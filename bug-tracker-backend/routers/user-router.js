@@ -1,8 +1,41 @@
 import express from 'express'
 import models from '../models/index.mjs'
-import { where } from 'sequelize'
 
 const router = express.Router()
+
+//path for a user to modify a project that they are part of
+//request body for updating project
+router.put('/:uid/projects/:pid', async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid)
+        const project = await models.Project.findByPk(req.params.pid, {
+            include: [{association: 'participants', as: 'participants'}]
+        })
+        
+        if(!user){
+            res.status(404).json({message:"user not found"})
+            return
+        }
+        if(!project){
+            res.status(404).json({message:'project not found'})
+            return
+        }
+        if(!project.participants.some(participant=> participant.id == user.id)){
+            res.status(401).json({message:'user is not a participant in the project'})
+        }
+        let newTitle = project.title
+        let newRepository = project.repository
+        if(req.body.title) newTitle = req.body.title
+        if(req.body.repository)  newRepository = req.body.repository
+        await models.Project.update({title:newTitle, repository:newRepository  },
+            {where:{id:project.id}, fields:['title', 'repository']})
+        
+        res.status(202).json({message:'project updated'})
+
+    }catch(err){
+        next(err)
+    }
+}) 
 
 //path for getting user based on email and password
 //request body is the email and password
@@ -221,15 +254,19 @@ router.post("/:uid/projects/:pid/add-bug", async (req, res, next)=>{
         })
 
         if(!project){
-            res.status(401).json({message:"project not found"})
+            res.status(404).json({message:"project not found"})
             return
         }
         if(!user){
-            res.status(401).json({message:"user not found"})
+            res.status(404).json({message:"user not found"})
             return
         }
         if(!project.testers.some(tester => tester.id === user.id)){
             res.status(401).json({message:"user is not tester for this project"})
+            return
+        }
+        if(!req.body.severity || !req.body.description || !req.body.commit){
+            res.status(401).json({message:'badly defined bug'})
             return
         }
         const bug = await models.Bug.create(req.body)
@@ -240,9 +277,28 @@ router.post("/:uid/projects/:pid/add-bug", async (req, res, next)=>{
     }
 })
 
-//path for a user to resulve a bug
-//request body is commit link
-router.put("/:uid/projects/:pid/resolve-bug/:bid", async (req, res, next)=>{
+//path for a user to see their assigned bugs
+router.get('/:uid/bugs', async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid)
+        if(!user){
+            res.status(401).json({message:"user not found"})
+            return
+        }
+        const bugs = await models.Bug.findAll({
+            where:{
+                memberId:user.id
+            }
+        })
+        
+       res.status(201).json(bugs)
+    }catch(err){
+        next(err)
+    }
+})
+
+//path for a project member to assign a bug to themeslves
+router.put('/:uid/projects/:pid/assign-bug/:bid', async (req, res, next)=>{
     try{
         const user = await models.User.findByPk(req.params.uid)
         const project = await models.Project.findByPk(req.params.pid, 
@@ -274,13 +330,39 @@ router.put("/:uid/projects/:pid/resolve-bug/:bid", async (req, res, next)=>{
             res.status(401).json({message:"bug does not belong to project"})
             return
         }
+        //await user.addBug(bug)
+        await models.Bug.update({ memberId:user.id },
+            {where:{id:bug.id}, fields:['memberId']})
+        res.status(202).json({message:'bug added to user'})
+    }catch(err){
+        next(err)
+    }
+})
+
+//path for a user to resolve a bug
+//request body is commit link
+router.put("/:uid/resolve-bug/:bid", async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid)
+        if(!user){
+            res.status(401).json({message:"user not found"})
+            return
+        }
+        const bugs = await models.Bug.findAll({
+            where:{
+                memberId:user.id
+            }
+        })
+        if(!bugs.some(bug=>bug.id == req.params.bid)){
+            res.status(404).json({message:'bug not found'})
+        }
         if(!req.body.resolvedLink){
             res.status(401).json({message:"no link provided"})
             return
         }
-        bug = await models.Bug.update({ resolved: true, resolvedLink: req.body.resolvedLink },
-             {where:{id:bug.id}, fields:['resolved', 'resolvedLink']})
-        res.status(202).json(bug)
+        await models.Bug.update({ resolved: true, resolvedLink: req.body.resolvedLink },
+             {where:{id:req.params.bid}, fields:['resolved', 'resolvedLink']})
+        res.status(202).json({message:'bug resolved'})
     }catch(err){
         next(err)
     }

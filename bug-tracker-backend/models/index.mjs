@@ -29,6 +29,10 @@ Project.belongsToMany(User, { as: 'participants', through: 'userParticipations' 
 Project.hasMany(Bug, { as: 'bugs', foreignKey: 'projectId' })
 Bug.belongsTo(Project, { as: 'project', foreignKey: 'projectId' })
 
+//bug can be assigned to one project member
+User.hasMany(Bug, { as: 'assignedBugs', foreignKey: 'memberId' })
+Bug.belongsTo(User,{as: 'assignedMember', foreignKey: 'memberId'})
+
 //sync database
 try {
     await sequelize.sync()
