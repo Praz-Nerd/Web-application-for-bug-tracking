@@ -1,7 +1,28 @@
 import express from 'express'
 import models from '../models/index.mjs'
+import { where } from 'sequelize'
 
 const router = express.Router()
+
+//path for getting user based on email and password
+//request body is the email and password
+router.post('/login', async (req, res, next)=>{
+    try{
+        const user = await models.User.findAll({
+            where:{
+                email: req.body.email,
+                password: req.body.password
+            }
+        })
+        //check if array is empty
+        if(user.length <= 0){
+            res.status(404).json({message:"user not found"})
+        }
+        res.status(200).json(user[0])
+    }catch(err){
+        next(err)
+    }
+})
 
 // path for adding a user /users
 router.post('/', async (req, res, next)=>{
@@ -42,12 +63,14 @@ router.post('/:uid/projects', async (req, res, next)=>{
     try{
         const user = await models.User.findByPk(req.params.uid)
         const creatorId = req.params.uid
-        const project = req.body
+        let project = req.body
         if(user){
             //add creator id
             project.creatorId = creatorId
-            await models.Project.create(project)
-            res.status(201).json({message:"Project created"})
+            project = await models.Project.create(req.body)
+            //add creator as member
+            await project.addParticipant(user)
+            res.status(201).json(project)
         }else{
             res.status(404).json({message:"user not found"})
         }
@@ -75,7 +98,7 @@ router.post('/:uid/projects/:pid/add-member', async (req, res, next)=>{
                         await project.addParticipant(participant)
                         res.status(200).json({message:`User ${participant.username} added to project ${project.title} as member`})
                     }else{
-                        res.status(500).json({message:"user is not creator of project"})
+                        res.status(401).json({message:"user is not creator of project"})
                     }
                 }else{
                     res.status(404).json({message:"member not found"})
@@ -120,6 +143,144 @@ router.post('/:uid/become-tester/:pid', async (req, res, next)=>{
         }else{
             res.status(404).json({message:"user not found"})
         }
+    }catch(err){
+        next(err)
+    }
+})
+
+//path for deleting a project, only creator can delete the project
+router.delete('/:uid/projects/:pid', async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid)
+        const creatorId = req.params.uid
+        let project = await models.Project.findByPk(req.params.pid)
+
+        if(!project){
+            res.status(401).json({message:"project not found"})
+            return
+        }
+        if(user){
+            if(creatorId == project.creatorId){
+                await project.destroy()
+                res.status(200).json({message:"project deleted"})
+            }
+            else{
+                res.status(401).json({message:"user is not creator of the project"})
+            }
+        }else{
+            res.status(404).json({message:"user not found"})
+        }
+    }catch(err){
+        next(err)
+    }
+})
+
+//path for viewing projects for which the user is a participant
+router.get("/:uid/projects/member", async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid, {
+            include: [{association: 'participatingProjects', as: 'participatingProjects'}]
+        })
+        if(user){
+           res.status(200).json(user.participatingProjects)
+        }
+        else{
+            res.status(404).json({message: "Cannot find user"})
+        }
+        
+    }catch(err){
+        next(err)
+    }
+})
+
+//path for viewing project for which the user is a tester
+router.get("/:uid/projects/tester", async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid, {
+            include: [{association: 'testingProjects', as: 'testingProjects'}]
+        })
+        if(user){
+           res.status(200).json(user.testingProjects)
+        }
+        else{
+            res.status(404).json({message: "Cannot find user"})
+        }
+        
+    }catch(err){
+        next(err)
+    }
+})
+
+//path for a tester to crete a bug for a specific project
+//request body is a bug object
+router.post("/:uid/projects/:pid/add-bug", async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid)
+        const project = await models.Project.findByPk(req.params.pid, 
+            {include: [{association: 'testers', as: 'testers'}]
+        })
+
+        if(!project){
+            res.status(401).json({message:"project not found"})
+            return
+        }
+        if(!user){
+            res.status(401).json({message:"user not found"})
+            return
+        }
+        if(!project.testers.some(tester => tester.id === user.id)){
+            res.status(401).json({message:"user is not tester for this project"})
+            return
+        }
+        const bug = await models.Bug.create(req.body)
+        await project.addBug(bug)
+        res.status(201).json(bug)
+    }catch(err){
+        next(err)
+    }
+})
+
+//path for a user to resulve a bug
+//request body is commit link
+router.put("/:uid/projects/:pid/resolve-bug/:bid", async (req, res, next)=>{
+    try{
+        const user = await models.User.findByPk(req.params.uid)
+        const project = await models.Project.findByPk(req.params.pid, 
+            {include: [{association: 'participants', as: 'participants'},
+                {association:'bugs', as:'bugs'}
+            ]
+        })
+        let bug = await models.Bug.findByPk(req.params.bid)
+
+        if(!project){
+            res.status(401).json({message:"project not found"})
+            return
+        }
+        if(!user){
+            res.status(401).json({message:"user not found"})
+            return
+        }
+        if(!bug){
+            res.status(401).json({message:"bug not found"})
+            return
+        }
+        //check that user is participant in the project
+        if(!project.participants.some(participant => participant.id === user.id)){
+            res.status(401).json({message:"user is not participant for this project"})
+            return
+        }
+        //check that the bug belongs to this project
+        if(!project.bugs.some(b => b.id === bug.id)){
+            res.status(401).json({message:"bug does not belong to project"})
+            return
+        }
+        if(!req.body.resolvedLink){
+            res.status(401).json({message:"no link provided"})
+            return
+        }
+        bug = await models.Bug.update({ resolved: true, resolvedLink: req.body.resolvedLink },
+             {where:{id:bug.id}, fields:['resolved', 'resolvedLink']})
+        res.status(202).json(bug)
     }catch(err){
         next(err)
     }
