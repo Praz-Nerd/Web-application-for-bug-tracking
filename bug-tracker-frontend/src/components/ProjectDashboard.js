@@ -26,7 +26,8 @@ const ProjectDashboard = () => {
         </Link>
         <button  onClick={logout}>Logout</button>
       </div>
-      <h1>Hello, {user.username}! My Projects</h1>
+      <h1>Hello, {user.username}!</h1>
+      <h1>My Projects</h1>
       <ul>
         {myProjects.map((project) => (
           <li key={project.id}>
