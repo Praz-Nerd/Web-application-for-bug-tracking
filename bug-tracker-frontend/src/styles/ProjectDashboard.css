@@ -3,7 +3,7 @@ body {
   color: #ffffff;
   font-family: 'Arial', sans-serif;
   margin: 0;
-  padding-left: 0;
+  padding: 0;
   font-size: 20px;
 }
 
@@ -27,6 +27,11 @@ button {
   gap: 0px;
 }
 
+.project-dashboard #greet {
+  text-align: center;
+  translate: -10px ;
+}
+
 .project-dashboard .listElement {
   display: flex;
   flex-direction: row;
@@ -46,7 +51,7 @@ button {
 
 .project-dashboard h1 {
   font-size: 30px;
-  margin-bottom: 22.5px;
+  margin-bottom: 20px;
   color: #ffffff;
   padding-left: 45px;
 }
@@ -58,10 +63,11 @@ button {
 
 .project-dashboard .navigation-buttons {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 0px;
   margin-bottom: 36px;
   margin-left: 45px;
+  margin-right: 45px;
 }
 
 .project-dashboard .navigation-buttons button {
@@ -100,6 +106,10 @@ button {
   align-items: center;
 }
 
+.project-dashboard li:hover {
+  background-color: #3b2e68;
+}
+
 .project-dashboard li a {
   background: linear-gradient(90deg, #ae4bbd, #913f9e);
   border-radius: 6.75px;
@@ -116,7 +126,7 @@ button {
 }
 
 .project-dashboard form {
-  margin-top: 22.5px;
+  margin-top: 0.5px;
 }
 
 .project-dashboard form select {
