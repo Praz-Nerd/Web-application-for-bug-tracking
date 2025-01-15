@@ -18,15 +18,17 @@ const ProjectDashboard = () => {
   return (
     <div className="project-dashboard">
       <div className="navigation-buttons">
-        <Link to="/projects/create">
-          <button>Create New Project</button>
-        </Link>
-        <Link to="/projects/all">
-          <button>View All Projects</button>
-        </Link>
+        <div>
+          <Link to="/projects/create">
+            <button>Create New Project</button>
+          </Link>
+          <Link to="/projects/all">
+            <button>View All Projects</button>
+          </Link>
+        </div>
         <button  onClick={logout}>Logout</button>
       </div>
-      <h1>Hello, {user.username}!</h1>
+      <h1 id="greet">Hello, {user.username}!</h1>
       <div class="section">
         <h1>My Projects</h1>
         <ul>
