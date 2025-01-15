@@ -122,27 +122,27 @@ router.post('/:uid/become-tester/:pid', async (req, res, next)=>{
 
         const user = await models.User.findByPk(userId)
         const project = await models.Project.findByPk(projectId, 
-            {include: [{association: 'participants', as: 'participants'}]})
-        
-        if(user){
-            if(project){
-                if(user.id != project.creatorId){
-                    //check if user is participant
-                    if(project.participants && !project.participants.some(participant => participant.id === userId)){
-                        await project.addTester(user)
-                        res.status(200).json({message:`User ${user.username} added to project ${project.title} as tester`})
-                    }else{
-                        res.status(400).json({message:"user is already a participant and cannot be a tester"})
-                    }
-                }else{
-                    res.status(400).json({message:"a tester cannot be the creator of the project"})
-                }
-            }else{
-                res.status(404).json({message:"project not found"})
-            }
-        }else{
+            {include: [{association: 'participants', as: 'participants'}]}
+        )
+        if(!user){
             res.status(404).json({message:"user not found"})
+            return
         }
+        if(!project){
+            res.status(404).json({message:"project not found"})
+            return
+        }
+        if(user.id === project.creatorId){
+            res.status(400).json({message:"a tester cannot be the creator of the project"})
+            return
+        }
+        if(project.participants.some(participant => participant.id == userId)){
+            res.status(400).json({message:"user is already a participant and cannot be a tester"})
+            return
+        }
+        await project.addTester(user)
+        res.status(200).json({message:`User ${user.username} added to project ${project.title} as tester`})
+
     }catch(err){
         next(err)
     }
