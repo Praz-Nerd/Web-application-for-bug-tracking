@@ -53,25 +53,28 @@ const ProjectDashboard = () => {
         <button  onClick={logout}>Logout</button>
       </div>
       <h1>Hello, {user.username}!</h1>
-      <h1>My Projects</h1>
-      <ul>
-        {myProjects.map((project) => (
-          <li key={project.id}>
-            {project.title} - {project.repository}
-            <Link to={`/projects/${project.id}/bugs`}>View Bugs</Link>
-          </li>
-        ))}
-      </ul>
-
-      <h1>Projects I Test</h1>
-      <ul>
-        {testerProjects.map((project) => (
-          <li key={project.id}>
-            {project.title} - {project.repository}
-            <Link to={`/projects/${project.id}/bugs/new`}>Submit Bug</Link>
-          </li>
-        ))}
-      </ul>
+      <div class="section">
+        <h1>My Projects</h1>
+        <ul>
+          {myProjects.map((project) => (
+            <li key={project.id}>
+              <div class="listElement"><div class="bullet">● &nbsp;</div> {project.title} - {project.repository} </div>
+                <Link to={`/projects/${project.id}/bugs`}>View Bugs</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="section">
+        <h1>Testing Project</h1>
+        <ul>
+          {testerProjects.map((project) => (
+            <li key={project.id}>
+              <div class="listElement"><div class="bullet">● &nbsp;</div> {project.title} - {project.repository}</div>
+              <Link to={`/projects/${project.id}/bugs/new`}>Submit Bug</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
