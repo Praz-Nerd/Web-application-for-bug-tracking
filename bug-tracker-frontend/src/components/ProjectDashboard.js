@@ -3,18 +3,44 @@ import { Link } from "react-router-dom";
 import useLocalStorage from "../utils/UseLocalStorage";
 import { AuthContext } from "../context/AuthProvider";
 import "../styles/ProjectDashboard.css";
+import getResponse from "../utils/GetResponse";
+
 
 const ProjectDashboard = () => {
+  const [myProjects, setMyProjects] = useState([])
+  const [testerProjects, setTesterProjects] = useState([])
   const { logout } = useContext(AuthContext);
   const [user, setUser] = useLocalStorage('user', null)
+  //fetching projects for which it is member
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const myProjectsJson = await getResponse(`http://localhost:8080/users/${user.id}/projects/member`, 'GET')
+        setMyProjects(myProjectsJson)
+      } catch (err) {
+        alert(err)
+      }
+    };
+    fetchData();
+  }, []);
 
-  const [myProjects, setMyProjects] = useState([
-    { id: 1, title: "My Project Alpha", repository: "https://repo1.com" },
-  ]);
-  const [testerProjects, setTesterProjects] = useState([
-    { id: 2, title: "Testing Project Beta", repository: "https://repo2.com" },
-  ]);
-  console.log(user)
+  //fetching projects fot which it is tester
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const myProjectsJson = await getResponse(`http://localhost:8080/users/${user.id}/projects/tester`, 'GET')
+        setTesterProjects(myProjectsJson)
+      } catch (err) {
+        alert(err)
+      }
+    };
+    fetchData();
+  }, []);
+
+  
+  //const myProjects = getResponse(`http://localhost:8080/users/${user.id}/projects/member`, 'GET')
+
+  //console.log(user)
   return (
     <div className="project-dashboard">
       <div className="navigation-buttons">
