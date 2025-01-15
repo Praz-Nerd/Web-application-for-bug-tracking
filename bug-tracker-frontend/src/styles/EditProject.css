@@ -1,0 +1,58 @@
+.edit-project {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 22.5px;
+    background: #2c2456;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    font-size: 18px;
+    text-align: center;
+  }
+  
+  .edit-project label {
+    display: block;
+    margin-bottom: 12.5px;
+    font-size: 18px;
+    color: #ffab8f;
+  }
+  
+  .edit-project h1 {
+    color:#ffffff;
+  }
+  
+  .edit-project input,
+  .edit-project select,
+  .edit-project textarea {
+    width: 100%;
+    padding: 12.5px;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 7.5px;
+    background-color: #1e1e3f;
+    color: #ffffff;
+    font-size: 16px;
+  }
+  
+  .edit-project input::placeholder,
+  .edit-project textarea::placeholder {
+    color: #bfbfbf;
+  }
+  
+  .edit-project button {
+    padding: 12.5px 20px;
+    background: linear-gradient(90deg, #ae4bbd, #913f9e);
+    color: white;
+    border: none;
+    border-radius: 7.5px;
+    font-size: 18px;
+    cursor: pointer;
+    width: 100%;
+    margin: 0;
+  }
+  
+  .edit-project button:hover {
+    background: linear-gradient(90deg, #82388e, #913f9e);
+    transform: scale(1.03);
+    transition: transform 0.3s ease;
+  }
+  

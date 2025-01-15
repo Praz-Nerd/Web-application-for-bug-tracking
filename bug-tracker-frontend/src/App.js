@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider from "./context/AuthProvider";
 import CreateProject from "./components/CreateProject";
 import "./styles/App.css";
+import EditProject from "./components/EditProject";
 
 function App() {
   return (
@@ -21,6 +22,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ProjectDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/projects/:projectId/edit"
+          element={
+            <ProtectedRoute>
+              <EditProject />
             </ProtectedRoute>
           }
         />

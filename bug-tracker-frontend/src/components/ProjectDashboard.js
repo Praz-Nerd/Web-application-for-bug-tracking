@@ -62,6 +62,7 @@ const ProjectDashboard = () => {
             <li key={project.id}>
               <div className="listElement"><div className="bullet">● &nbsp;</div> {project.title} - {project.repository} </div>
                 <Link to={`/projects/${project.id}/bugs`}>View Bugs</Link>
+                <Link to={`/projects/${project.id}/edit`}>Edit Project</Link>
             </li>
           ))}
         </ul>

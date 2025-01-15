@@ -4,6 +4,7 @@ import "../styles/BugForm.css";
 const BugForm = () => {
   const [description, setDescription] = useState("");
   const [severity, setSeverity] = useState("Low");
+  const [commitLink, setCommitLink] = useState("");
 
   const submitBug = () => {
     alert("Bug submitted successfully.");
@@ -11,7 +12,7 @@ const BugForm = () => {
 
   return (
     <div className="bug-form">
-      <h1>Submit a Bug</h1>
+      <h1>Register a Bug</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -19,9 +20,10 @@ const BugForm = () => {
         }}
       >
         <textarea
-          placeholder="Description"
+          placeholder="Bug Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          required
         ></textarea>
         <select
           value={severity}
@@ -31,7 +33,14 @@ const BugForm = () => {
           <option value="Medium">Medium</option>
           <option value="High">High</option>
         </select>
-        <button type="submit">Submit</button>
+        <input
+          type="url"
+          placeholder="Commit Link"
+          value={commitLink}
+          onChange={(e) => setCommitLink(e.target.value)}
+          required
+        />
+        <button type="submit">Submit Bug</button>
       </form>
     </div>
   );
