@@ -1,26 +1,137 @@
+body {
+  background: linear-gradient(90deg, #150e2e, #191339);
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding-left: 0;
+  font-size: 20px;
+}
+
+button {
+  background: linear-gradient(90deg, #ae4bbd, #913f9e);
+  border: none;
+  border-radius: 9px;
+  color: white;
+  padding: 11.25px 22.5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.project-dashboard .section {
+  background-color: #2c2456;
+  padding: 16.875px;
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 0px;
+}
+
+.project-dashboard .listElement {
+  display: flex;
+  flex-direction: row;
+}
+
+.project-dashboard .bullet {
+  color: #ffab8f;
+  font-size: 20px;
+}
+
 .project-dashboard {
-  padding: 20px;
+  padding: 45px;
+  color: #ffffff;
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+.project-dashboard h1 {
+  font-size: 30px;
+  margin-bottom: 22.5px;
+  color: #ffffff;
+  padding-left: 45px;
 }
 
 .project-dashboard ul {
-  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.project-dashboard .navigation-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0px;
+  margin-bottom: 36px;
+  margin-left: 45px;
+}
+
+.project-dashboard .navigation-buttons button {
+  background: none;
+  border: none;
+  border-radius: 9px;
+  color: white;
+  padding: 11.25px 22.5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.project-dashboard button:hover {
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
+}
+
+.project-dashboard .navigation-buttons button:hover {
+  transform: none;
+  color: #ffab8f;
+  text-decoration: underline;
+}
+
+.project-dashboard .navigation-buttons a {
+  text-decoration: none;
+  color: #ffab8f;
 }
 
 .project-dashboard li {
+  background-color: #2c2456;
+  border-radius: 9px;
+  padding: 16.875px;
+  margin-bottom: 11.25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+}
+
+.project-dashboard li a {
+  background: linear-gradient(90deg, #ae4bbd, #913f9e);
+  border-radius: 6.75px;
+  color: white;
+  text-decoration: none;
+  padding: 9.625px 16.875px;
+  font-size: 17.5px;
+}
+
+.project-dashboard li a:hover {
+  background: linear-gradient(90deg, #82388e, #913f9e);
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
 }
 
 .project-dashboard form {
-  margin-top: 20px;
+  margin-top: 22.5px;
 }
 
 .project-dashboard form select {
   height: auto;
+}
+
+body::-webkit-scrollbar {
+  width: 9px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #2c2456, #2c2456);
+  border-radius: 9px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #1e1e3f;
 }

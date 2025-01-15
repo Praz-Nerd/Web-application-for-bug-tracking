@@ -13,15 +13,17 @@ const AllProjects = () => {
 
   return (
     <div className="all-projects">
-      <h1>All Projects</h1>
-      <ul>
-        {projects.map((project) => (
-          <li key={project.id}>
-            {project.title} - {project.repository}
-            <button onClick={() => becomeTester(project.id)}>Become Tester</button>
-          </li>
-        ))}
-      </ul>
+      <div class="section">
+        <h1>All Projects</h1>
+        <ul>
+          {projects.map((project) => (
+            <li key={project.id}>
+              <div class="listElement"><div class="bullet">● &nbsp;</div> {project.title} - {project.repository}</div>
+              <button onClick={() => becomeTester(project.id)}>Become Tester</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

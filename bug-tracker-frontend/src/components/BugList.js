@@ -13,17 +13,19 @@ const BugList = () => {
 
   return (
     <div className="bug-list">
-      <h1>Bugs</h1>
-      <ul>
-        {bugs.map((bug) => (
-          <li key={bug.id}>
-            {bug.description} - {bug.severity} - {bug.resolved ? "Resolved" : "Open"}
-            {!bug.resolved && (
-              <button onClick={() => resolveBug(bug.id)}>Resolve</button>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div class="section">
+        <h1>Bugs</h1>
+        <ul>
+          {bugs.map((bug) => (
+            <li key={bug.id}>
+              <div class="listElement"><div class="bullet">● &nbsp;</div> {bug.description} - {bug.severity} - {bug.resolved ? "Resolved" : "Open"} </div>
+              {!bug.resolved && (
+                <button onClick={() => resolveBug(bug.id)}>Resolve</button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
