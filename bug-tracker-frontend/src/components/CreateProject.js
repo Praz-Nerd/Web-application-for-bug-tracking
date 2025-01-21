@@ -1,18 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/CreateProject.css";
+import getResponse from "../utils/GetResponse";
+import useLocalStorage from "../utils/UseLocalStorage";
 
 const CreateProject = () => {
   const [newProjectTitle, setNewProjectTitle] = useState("");
   const [repository, setRepository] = useState("");
-  const [contributors, setContributors] = useState([
-    { id: 3, username: "contributor1" },
-    { id: 4, username: "contributor2" },
-  ]);
+  const [contributors, setContributors] = useState([]);
   const [selectedContributors, setSelectedContributors] = useState([]);
+  const [user, setUser] = useLocalStorage('user', null)
   const navigate = useNavigate();
 
-  const createProject = () => {
+  // fetch all users to add to project
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          let contributorsJson = await getResponse(
+            "http://localhost:8080/users",
+            "GET"
+          );
+          contributorsJson = contributorsJson.filter((contributor) => contributor.id !== user.id);
+          setContributors(contributorsJson);
+        } catch (err) {
+          alert(err);
+        }
+      }
+      fetchData();
+    }, []);
+
+  const createProject = async () => {
+    let project = await getResponse(`http://localhost:8080/users/${user.id}/projects`, 'POST', JSON.stringify({
+      title: newProjectTitle,
+      repository: repository
+    }))
+
+    for (let contributor of selectedContributors) {
+      await getResponse(`http://localhost:8080/${user.id}/projects/${project.id}/add-member`, 'POST', JSON.stringify({participantId: contributor}))
+      console.log()
+    }
+
     alert("Project created successfully.");
     navigate("/projects");
   };
