@@ -30,18 +30,23 @@ const CreateProject = () => {
     }, []);
 
   const createProject = async () => {
-    let project = await getResponse(`http://localhost:8080/users/${user.id}/projects`, 'POST', JSON.stringify({
-      title: newProjectTitle,
-      repository: repository
-    }))
-
-    for (let contributor of selectedContributors) {
-      await getResponse(`http://localhost:8080/${user.id}/projects/${project.id}/add-member`, 'POST', JSON.stringify({participantId: contributor}))
-      console.log()
+    if(newProjectTitle && repository){
+      let project = await getResponse(`http://localhost:8080/users/${user.id}/projects`, 'POST', JSON.stringify({
+        title: newProjectTitle,
+        repository: repository
+      }))
+  
+      for (let contributor of selectedContributors) {
+        await getResponse(`http://localhost:8080/${user.id}/projects/${project.id}/add-member`, 'POST', JSON.stringify({participantId: contributor}))
+        console.log()
+      }
+  
+      alert("Project created successfully.");
+      navigate("/projects");
     }
-
-    alert("Project created successfully.");
-    navigate("/projects");
+    else{
+      alert("Incomplete fields...")
+    }
   };
 
   return (

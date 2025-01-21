@@ -31,6 +31,23 @@ router.get('/:pid', async (req, res, next)=>{
     }
 })
 
+//path for deleting a project
+router.delete('/:pid', async (req, res, next)=>{
+    try{
+        let project = await models.Project.findByPk(req.params.pid)
+        if(project){
+            await project.destroy()
+            res.status(200).json({message:'project deleted'})
+        }
+        else{
+            res.status(404).json({message: "Cannot find project"})
+        }
+        
+    }catch(err){
+        next(err)
+    }
+})
+
 //get members of a project
 // path /projects/:pid/members
 router.get('/:pid/members', async (req, res, next)=>{
