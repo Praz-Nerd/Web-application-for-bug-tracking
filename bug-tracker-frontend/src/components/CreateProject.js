@@ -37,8 +37,8 @@ const CreateProject = () => {
       }))
   
       for (let contributor of selectedContributors) {
-        await getResponse(`http://localhost:8080/${user.id}/projects/${project.id}/add-member`, 'POST', JSON.stringify({participantId: contributor}))
-        console.log()
+        let response = await getResponse(`http://localhost:8080/users/${user.id}/projects/${project.id}/add-member`, 'POST', JSON.stringify({participantId: parseInt(contributor)}))
+        console.log(JSON.stringify({participantId: parseInt(contributor)}))
       }
   
       alert("Project created successfully.");
