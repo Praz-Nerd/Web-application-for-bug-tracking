@@ -40,7 +40,7 @@
   
   .edit-project button {
     padding: 12.5px 20px;
-    background: linear-gradient(90deg, #ae4bbd, #913f9e);
+    background: linear-gradient(90deg, #f97c52, #ffc17e);
     color: white;
     border: none;
     border-radius: 7.5px;
@@ -51,7 +51,7 @@
   }
   
   .edit-project button:hover {
-    background: linear-gradient(90deg, #82388e, #913f9e);
+    background: linear-gradient(90deg, #f47349, #f9b164);
     transform: scale(1.03);
     transition: transform 0.3s ease;
   }

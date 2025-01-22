@@ -4,6 +4,7 @@ import useLocalStorage from "../utils/UseLocalStorage";
 import { AuthContext } from "../context/AuthProvider";
 import "../styles/ProjectDashboard.css";
 import getResponse from "../utils/GetResponse";
+import bugTrackerLogo from "../assets/bug-tracker-logo.png";
 
 
 const ProjectDashboard = () => {
@@ -44,6 +45,7 @@ const ProjectDashboard = () => {
   return (
     <div className="project-dashboard">
       <div className="navigation-buttons">
+      <img src={bugTrackerLogo} alt="Bug Tracker Logo" className="logo"></img>
         <div>
           <Link to="/projects/create">
             <button>Create New Project</button>
@@ -51,18 +53,18 @@ const ProjectDashboard = () => {
           <Link to="/projects/all">
             <button>View All Projects</button>
           </Link>
+          <button onClick={logout}>Logout</button>
         </div>
-        <button  onClick={logout}>Logout</button>
       </div>
-      <h1 id="greet">Hello, {user.username}!</h1>
+      <h1 id="greet">Welcome, {user.username}!</h1>
       <div className="section">
         <h1>My Projects</h1>
         <ul>
           {myProjects.map((project) => (
             <li key={project.id}>
               <div className="listElement"><div className="bullet">● &nbsp;</div> {project.title} - {project.repository} </div>
-                <Link to={`/projects/${project.id}/bugs`}>View Bugs</Link>
-                <Link to={`/projects/${project.id}/edit`}>Edit Project</Link>
+                <div className="elementButtons"><Link to={`/projects/${project.id}/bugs`}>View Bugs</Link>
+                <Link to={`/projects/${project.id}/edit`}>Edit Project</Link></div>
             </li>
           ))}
         </ul>
