@@ -5,3 +5,19 @@
 h1 {
   margin-bottom: 20px;
 }
+
+button:hover {
+  background: linear-gradient(90deg, #f47349, #f9b164);
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
+}
+
+button {
+  background: linear-gradient(90deg, #f97c52, #ffc17e);
+  border: none;
+  border-radius: 9px;
+  color: white;
+  padding: 11.25px 22.5px;
+  font-size: 20px;
+  cursor: pointer;
+}

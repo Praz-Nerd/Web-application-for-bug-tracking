@@ -3,18 +3,21 @@ body {
   color: #ffffff;
   font-family: 'Arial', sans-serif;
   margin: 0;
-  padding-left: 0;
+  padding: 0;
   font-size: 20px;
 }
 
-button {
-  background: linear-gradient(90deg, #ae4bbd, #913f9e);
+.bug-list input,
+.bug-list select,
+.bug-list textarea {
+  width: 100%;
+  padding: 12.5px;
+  margin-bottom: 25px;
   border: none;
-  border-radius: 9px;
-  color: white;
-  padding: 11.25px 22.5px;
-  font-size: 20px;
-  cursor: pointer;
+  border-radius: 7.5px;
+  background-color: #1e1e3f;
+  color: #ffffff;
+  font-size: 16px;
 }
 
 .bug-list .section {
@@ -24,12 +27,13 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  gap: 0px;
 }
 
 .bug-list .listElement {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .bug-list .bullet {
@@ -42,6 +46,7 @@ button {
   color: #ffffff;
   padding-left: 36px;
   padding-right: 36px;
+  align-items: center;
 }
 
 .bug-list h1 {
@@ -54,40 +59,17 @@ button {
 .bug-list ul {
   list-style: none;
   padding: 0;
+  align-items: center;
 }
 
-.bug-list .navigation-buttons {
-  display: flex;
-  justify-content: flex-start;
-  gap: 0px;
-  margin-bottom: 36px;
-  margin-left: 45px;
-}
-
-.bug-list .navigation-buttons button {
-  background: none;
-  border: none;
-  border-radius: 9px;
-  color: white;
-  padding: 11.25px 22.5px;
-  font-size: 20px;
-  cursor: pointer;
+.bug-list button {
+  margin-left: 200px;
+  margin-right: 200px;
 }
 
 .bug-list button:hover {
   transform: scale(1.03);
   transition: transform 0.3s ease;
-}
-
-.bug-list .navigation-buttons button:hover {
-  transform: none;
-  color: #ffab8f;
-  text-decoration: underline;
-}
-
-.bug-list .navigation-buttons a {
-  text-decoration: none;
-  color: #ffab8f;
 }
 
 .bug-list li {
@@ -105,7 +87,7 @@ button {
 }
 
 .bug-list li a {
-  background: linear-gradient(90deg, #ae4bbd, #913f9e);
+  background: linear-gradient(90deg, #f2bcaa, #ffab8f);
   border-radius: 6.75px;
   color: white;
   text-decoration: none;
@@ -138,4 +120,22 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-track {
   background: #1e1e3f;
+}
+
+.bug-list .resolve-bug-form {
+  display: flex;
+  justify-content: end;
+  margin-top: auto;
+  margin-bottom: auto;
+  translate: 0px 14px;
+}
+
+.bug-list .resolve-bug-form button {
+  width: 250px;
+  height: 45px;
+  margin: 0;
+  margin-left: 20px;
+  margin-top: auto;
+  margin-bottom: auto;
+  translate: 0px -10px;
 }

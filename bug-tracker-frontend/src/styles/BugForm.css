@@ -40,7 +40,7 @@
 
 .bug-form button {
   padding: 12.5px 20px;
-  background: linear-gradient(90deg, #ae4bbd, #913f9e);
+  /* background: linear-gradient(90deg, #ae4bbd, #913f9e); */
   color: white;
   border: none;
   border-radius: 7.5px;

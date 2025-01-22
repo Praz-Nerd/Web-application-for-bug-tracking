@@ -62,13 +62,27 @@ const CreateProject = () => {
           type="text"
           placeholder="Project Title"
           value={newProjectTitle}
-          onChange={(e) => setNewProjectTitle(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (value.length <= 35) {
+              setNewProjectTitle(value);
+            } else {
+              alert("Project Title cannot exceed 50 characters.");
+            }
+          }}
         />
         <input
           type="text"
           placeholder="Repository"
           value={repository}
-          onChange={(e) => setRepository(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (value.length <= 35) {
+              setRepository(e.target.value)
+            } else {
+              alert("Project Repository name cannot exceed 50 characters.");
+            }
+          }}
         />
         <select
           multiple
