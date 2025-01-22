@@ -129,7 +129,7 @@ router.post('/:uid/projects/:pid/add-member', async (req, res, next)=>{
                 if(participant){
                     if(user.id == project.creatorId){
                         await project.addParticipant(participant)
-                        res.status(200).json({message:`User ${participant.username} added to project ${project.title} as member`})
+                        res.status(200).json({message:"User added to project"})
                     }else{
                         res.status(401).json({message:"user is not creator of project"})
                     }

@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/BugForm.css";
+import { useNavigate } from "react-router-dom";
+import getResponse from "../utils/GetResponse";
+import useLocalStorage from "../utils/UseLocalStorage";
+import { useParams } from "react-router-dom";
 
 const BugForm = () => {
   const [description, setDescription] = useState("");
   const [severity, setSeverity] = useState("Low");
   const [commitLink, setCommitLink] = useState("");
+  const [user, setUser] = useLocalStorage('user', null)
+  const navigate = useNavigate();
+  const {projectId} = useParams()
 
-  const submitBug = () => {
-    alert("Bug submitted successfully.");
+  const submitBug = async () => {
+    if(description&&severity&&commitLink){
+      const createBug = await getResponse(`http://localhost:8080/users/${user.id}/projects/${projectId}/add-bug`, 'POST', JSON.stringify({
+        severity: severity.toUpperCase(),
+        description: description,
+        commit: commitLink
+      }))
+      alert("Bug submitted successfully.");
+      navigate(`/projects`)
+    }
+    
   };
 
   return (
@@ -34,7 +50,6 @@ const BugForm = () => {
           <option value="High">High</option>
         </select>
         <input
-          type="url"
           placeholder="Commit Link"
           value={commitLink}
           onChange={(e) => setCommitLink(e.target.value)}

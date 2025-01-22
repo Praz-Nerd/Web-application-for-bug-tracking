@@ -4,7 +4,7 @@ export default async function getResponse(path, method, body) {
         method: method,
         headers:{'Content-Type':'application/json'}
     }
-    if(method === 'POST')params.body = body
+    if(method === 'POST'||method === 'PUT')params.body = body
     const response = await fetch(path, params)
     let result = await response.json()
     return result

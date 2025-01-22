@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/EditProject.css";
+import getResponse from "../utils/GetResponse";
+import useLocalStorage from "../utils/UseLocalStorage";
 
 const EditProject = () => {
   const { projectId } = useParams();
   const [title, setTitle] = useState("");
   const [repository, setRepository] = useState("");
+  const [user, setUser] = useLocalStorage('user', null)
   const navigate = useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const project = await getResponse(
+          `http://localhost:8080/projects/${projectId}`,
+          "GET"
+        );
+        setTitle(project.title);
+        setRepository(project.repository);
+      } catch (err) {
+        alert(err);
+      }
+    };
+    fetchData();
+  }, [])
 
-  const updateProject = () => {
+  const updateProject = async () => {
+      const project = await getResponse(`http://localhost:8080/users/${user.id}/projects/${projectId}`, 'PUT', JSON.stringify({
+        title: title,
+        repository: repository
+      }))
       alert("Project updated successfully!");
-      navigate("/projects"); // Redirect to dashboard after saving
+      navigate("/projects");
   };
 
   return (
@@ -30,7 +52,6 @@ const EditProject = () => {
           required
         />
         <input
-          type="url"
           value={repository}
           placeholder="Repository Link"
           onChange={(e) => setRepository(e.target.value)}
