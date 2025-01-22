@@ -1,24 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/BugList.css";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import getResponse from "../utils/GetResponse";
+import useLocalStorage from "../utils/UseLocalStorage";
 
 const BugList = () => {
-  const [bugs, setBugs] = useState([
-    { id: 1, description: "Bug 1", severity: "High", resolved: false, assignedMember: null },
-    { id: 2, description: "Bug 2", severity: "Low", resolved: false, assignedMember: null },
-  ]);
+  const [user, setUser] = useLocalStorage('user', null)
+  const [members, setMembers] = useState([])
+  const navigate = useNavigate();
+  const {projectId} = useParams()
+  const [bugs, setBugs] = useState([]);
 
-  const resolveBug = (bugId) => {
-    alert(`Bug ${bugId} resolved.`);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bugsJson = await getResponse(`http://localhost:8080/projects/${projectId}/bugs`, 'GET')
+        setBugs(bugsJson)
+        for(let bug of bugsJson){
+          if(bug.memberId){
+            const member = await getResponse(`http://localhost:8080/users/${bug.memberId}`, 'GET')
+            setMembers(prevMembers => [...prevMembers, member])
+          }
+        }
+      } catch (err) {
+        alert(err)
+      }
+    };
+    fetchData();
+  },[])
+
+  const resolveBug = async (bugId, resolvedLink) => {
+    const resolveBug = await getResponse(`http://localhost:8080/users/${user.id}/resolve-bug/${bugId}`, 'PUT', JSON.stringify({
+      resolvedLink: resolvedLink
+    }))
+    alert(`Bug resolved.`);
+    window.location.reload();
   };
 
-  const allocateBug = (bugId) => {
-    alert(`Bug ${bugId} allocated to you.`);
-    bugs.forEach((bug) => {
-      if (bug.id === bugId) {
-        bug.assignedMember = { id: 1 };
-        console.log(bug);
-      }
-    });
+  const allocateBug = async (bugId) => {
+    const allocateBug = await getResponse(`http://localhost:8080/users/${user.id}/projects/${projectId}/assign-bug/${bugId}`, 'PUT')
+    alert(`Bug allocated to you.`);
+    window.location.reload();
   }
 
   return (
@@ -31,17 +54,17 @@ const BugList = () => {
               <div className="listElement">
                 <div className="bullet">● &nbsp;</div>
                 {bug.description} - {bug.severity} -{" "}
-                {bug.resolved ? "Resolved" : "Open"} -{" "}
-                {bug.assignedMember
-                  ? `Assigned to User ${bug.assignedMember.id}`
+                {bug.resolved ? `Resolved - ${bug.resolvedLink}` : "Open"} -{" "}
+                {bug.memberId
+                  ? `Assigned to User ${members.find(member => member.id === bug.memberId)?.username || 'Unknown'}`
                   : "Unassigned"}
               </div>
-              {!bug.assignedMember && (
+              {!bug.memberId && (
                 <button onClick={() => allocateBug(bug.id)}>
                   Allocate to Me
                 </button>
               )} 
-              {!bug.resolved && (
+              {!bug.resolved && bug.memberId===user.id && (
                 <ResolveBugForm
                 bugId={bug.id}
                 onResolve={(resolvedLink) =>
