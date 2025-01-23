@@ -54,7 +54,7 @@ const BugList = () => {
               <div className="listElement">
                 <div className="bullet">● &nbsp;</div>
                 {bug.description} - {bug.severity} -{" "}
-                {bug.resolved ? `Resolved - ${bug.resolvedLink}` : "Open"} -{" "}
+                {bug.resolved ? `Resolved - ${bug.resolvedLink}` : `Open: ${bug.commit}`} -{" "}
                 {bug.memberId
                   ? `Assigned to User ${members.find(member => member.id === bug.memberId)?.username || 'Unknown'}`
                   : "Unassigned"}
